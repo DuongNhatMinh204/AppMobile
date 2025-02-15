@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "105227538071",
+    "project_id": "app-du-lich-1",
+    "storage_bucket": "app-du-lich-1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105227538071:android:31486e7eea84cc4a05a3d2",
+        "android_client_info": {
+          "package_name": "com.example.app_du_lich"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-oibUdRPSKhzFyW64vmT1f1SmwzUviPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
