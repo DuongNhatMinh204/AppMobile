@@ -1,60 +1,51 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../models/user_model.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Đăng ký tài khoản
-  Future<UserModel?> register(String name, String email, String phone, String password) async {
+  Future<bool> registerUser(String phone, String password) async {
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      // Kiểm tra số điện thoại đã tồn tại chưa
+      var userExists = await _firestore.collection("users").doc(phone).get();
+      if (userExists.exists) {
+        print("Số điện thoại đã được đăng ký.");
+        return false;
+      }
 
-      // Tạo model user
-      UserModel newUser = UserModel(
-        uid: userCredential.user!.uid,
-        name: name,
-        email: email,
-        phone: phone,
-      );
+      // Lưu tài khoản vào Firestore
+      await _firestore.collection("users").doc(phone).set({
+        "phone": phone,
+        "password": password, // Không nên lưu password thẳng như thế này
+      });
 
-      // Lưu vào Firestore
-      await _firestore.collection('users').doc(newUser.uid).set(newUser.toMap());
-
-      return newUser;
+      print("Đăng ký thành công!");
+      return true;
     } catch (e) {
-      print('Lỗi đăng ký: $e');
-      return null;
+      print("Lỗi khi đăng ký: $e");
+      return false;
     }
   }
 
   // Đăng nhập tài khoản
-  Future<UserModel?> login(String email, String password) async {
+  Future<bool> loginUser(String phone, String password) async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      // Lấy thông tin user từ Firestore
-      DocumentSnapshot userDoc =
-      await _firestore.collection('users').doc(userCredential.user!.uid).get();
-
+      var userDoc = await _firestore.collection("users").doc(phone).get();
       if (userDoc.exists) {
-        return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        if (userDoc.data()?["password"] == password) {
+          print("Đăng nhập thành công!");
+          return true;
+        } else {
+          print("Mật khẩu không đúng.");
+          return false;
+        }
+      } else {
+        print("Số điện thoại chưa được đăng ký.");
+        return false;
       }
     } catch (e) {
-      print('Lỗi đăng nhập: $e');
-      return null;
+      print("Lỗi khi đăng nhập: $e");
+      return false;
     }
-  }
-
-  // Đăng xuất
-  Future<void> logout() async {
-    await _auth.signOut();
   }
 }
