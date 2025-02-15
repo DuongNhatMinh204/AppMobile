@@ -1,7 +1,9 @@
+import 'package:app_du_lich/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class BookingConfirmationScreen extends StatelessWidget {
+  // final String userId ; // id nguoi dung
   final String selectedDestination;
   final String selectedHotel;
   final int participants;
@@ -13,6 +15,7 @@ class BookingConfirmationScreen extends StatelessWidget {
   final double totalPrice;
 
   const BookingConfirmationScreen({
+    // required this.userId ,
     required this.selectedDestination,
     required this.selectedHotel,
     required this.participants,
@@ -27,6 +30,14 @@ class BookingConfirmationScreen extends StatelessWidget {
 
   void _confirmBooking(BuildContext context) async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    AuthService authService = AuthService() ;
+
+    // Lấy số điện thoại của user
+    String? phone = await authService.getCurrentUserPhone();
+    if (phone == null) {
+      print("Không tìm thấy số điện thoại!");
+      return;
+    }
 
     // Tạo dữ liệu đặt chuyến đi
     Map<String, dynamic> bookingData = {
@@ -35,7 +46,7 @@ class BookingConfirmationScreen extends StatelessWidget {
       "flight": selectedFlight,
       "participants": participants,
       "totalPrice": totalPrice,
-      "userId": "1", // TODO: Thay bằng ID thực của user
+      "userId": phone, //
       "dateTime": selectedDateTime.toIso8601String(),
     };
 

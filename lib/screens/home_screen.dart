@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'destination_selection_screen.dart';
+import 'history_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -16,7 +18,34 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Text("Chào mừng bạn đến với ứng dụng du lịch!"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DestinationSelectionScreen(),
+                  ),
+                );
+              },
+              child: Text("Book"),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HistoryScreen(),
+                  ),
+                );
+              },
+              child: Text("History"),
+            ),
+          ],
+        ),
       ),
     );
   }

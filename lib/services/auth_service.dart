@@ -16,7 +16,8 @@ class AuthService {
       // Lưu tài khoản vào Firestore
       await _firestore.collection("users").doc(phone).set({
         "phone": phone,
-        "password": password, // Không nên lưu password thẳng như thế này
+        "password": password,
+        "role" : "user" ,
       });
 
       print("Đăng ký thành công!");
@@ -33,6 +34,11 @@ class AuthService {
       var userDoc = await _firestore.collection("users").doc(phone).get();
       if (userDoc.exists) {
         if (userDoc.data()?["password"] == password) {
+          // Lưu số điện thoại vào Firestore (có thể lấy lại sau này)
+          await _firestore.collection("session").doc("current_user").set({
+            "phone": phone,
+          });
+
           print("Đăng nhập thành công!");
           return true;
         } else {
@@ -47,5 +53,10 @@ class AuthService {
       print("Lỗi khi đăng nhập: $e");
       return false;
     }
+  }
+  // Lấy số điện thoại của user đã đăng nhập
+  Future<String?> getCurrentUserPhone() async {
+    var userDoc = await _firestore.collection("session").doc("current_user").get();
+    return userDoc.data()?["phone"];
   }
 }
