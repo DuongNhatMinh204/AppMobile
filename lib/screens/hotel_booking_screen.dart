@@ -32,6 +32,31 @@ class _HotelBookingScreenState extends State<HotelBookingScreen> {
       "price": 90,
       "image": "assets/images/hotel_danang.jpg",
     },
+    {
+      "name" : "JW  Marriot Hotel" ,
+      "price" : 100 ,
+      "image" : "assets/images/marriot.jpg",
+    },
+    {
+      "name" : "Sofitel Hotel" ,
+      "price" : 88 ,
+      "image" : "assets/images/sofitel.jpg",
+    },
+    {
+      "name" : "Canaaa Hotel" ,
+      "price" : 299 ,
+      "image" : "assets/images/hotel_danang.jpg",
+    },
+    {
+      "name" : "Active Hotel" ,
+      "price" : 450 ,
+      "image" : "assets/images/sofitel.jpg",
+    },
+    {
+      "name" : "Lovely Hotel" ,
+      "price" : 450 ,
+      "image" : "assets/images/grand.jpg",
+    }
   ];
 
   void _selectHotel(Map<String, dynamic> hotel) {
